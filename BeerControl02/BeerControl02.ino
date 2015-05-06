@@ -45,7 +45,7 @@ int displ = 1;
 //LCD end
 
 //Pomp cntrol
-int pausetime = 10;
+int pausetime = 5;
 
 //tempcontrol
 unsigned long tmills = 0;
@@ -326,7 +326,7 @@ void GetTemperature() {//                                          TEMPERATURE
 void ButtonsLoop(){//                                              BUTTONS
   analogVal = analogRead (3);
   analogSensor = analogRead (2);
-  
+    
   if((millis()-lastsensortime)>1000*pausetime){
     if(analogSensor>100){
       lastsensortime = millis();
@@ -342,6 +342,8 @@ void ButtonsLoop(){//                                              BUTTONS
       lastsensortime = millis();
     }
   }
+  
+  
   if(analogVal>200){
   midCnt++;
   midBtnVal = midBtnVal + analogVal;  
