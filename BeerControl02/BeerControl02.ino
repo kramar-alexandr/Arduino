@@ -47,6 +47,12 @@ int displ = 1;
 //Pomp cntrol
 int pausetime = 5;
 
+//Sound
+int soundchanel = 7;
+unsigned long lastbeep,beeptime;
+boolean beepflag,playbeep;
+int signaltime;
+
 //tempcontrol
 unsigned long tmills = 0;
 unsigned long oldtmills = 0;
@@ -57,11 +63,43 @@ long tseconds = 0;
 int tminutes = 0;
 int program = 0;
 int prgcnt = 6;
-float totemp[] = {40,45,50,55,60,0};
-int progtime[] = {5,5,5,5,5,99};
+float totemp[] = {75,67,72,78,100,0};
+int progtime[] = {50,30,15,5,100,1};
+int pauseflag[] = {1,0,0,0,1,0};
 int remtminutes = 0;
 boolean oncontrol;
 float heatspeed1,heatspeed2,oldT1,oldT2;
+
+
+
+void Beep(){
+  if((millis()-beeptime)>100){
+     beepflag = !beepflag;
+     beeptime = millis();
+     
+     if(playbeep){
+      if(beepflag){
+        tone (soundchanel, 500);
+      }else{
+        tone(soundchanel, 1000);
+      }
+      }else{
+         noTone(soundchanel);
+      }
+    
+      if((millis()-lastbeep)>signaltime*1000){
+        playbeep = false;
+      }  
+     
+  }
+}
+
+void BeepProc(int time){
+  
+  playbeep = true;
+  lastbeep = millis();
+  signaltime = time;
+}
 
 void printdisp1(){
   lcd.setCursor(8,0);
@@ -270,7 +308,13 @@ void PressBtn5(){
 }
 
 void PressBtn6(){
+  if(pauseflag[program]==1){
+    pauseflag[program]=1;
+  }else{
+    pauseflag[program]=0;
+  }
 }
+
 void PressBtn7(){
 }
 void PressBtn8(){
@@ -490,7 +534,9 @@ void setup() {
   oldtmills=millis();
   oncontrol = true;
   
-  Serial.begin(9600);
+  pinMode(soundchanel, OUTPUT); //объявляем пин как выход  sound
+  
+  //Serial.begin(9600);
 }
 
 void ControlTemp(){
@@ -514,7 +560,7 @@ void ControlTemp(){
         rel3 = true;
       }
     }
-    if(T1>temp){
+    if(T1>temp+0.5){
       if(rel2){
         digitalWrite(RELAY2, HIGH);
         rel2 = false;
@@ -524,14 +570,19 @@ void ControlTemp(){
         rel3 = false;
       }
     }
-    if(T1>temp-0.5){
+    if(T2>temp-0.5){
       if(tseconds>=60){
         tminutes++;
         tseconds = 0;
         
         if(maxmin>0 and tminutes>=maxmin){
-          tminutes = 0;
-          program++;
+          if(pauseflag[program]==0){
+            tminutes = 0;
+            program++;
+            BeepProc(10);
+          }else {
+            BeepProc(1);
+          }
         }
       }
       tseconds++;
@@ -543,7 +594,7 @@ void ControlTemp(){
 
 void loop() {
   GetTemperature();//UpdateTemp T1 T2
-  
+  Beep();
   if(tmills1>=60000){
     
     tmills1=0;
