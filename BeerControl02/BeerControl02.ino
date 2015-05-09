@@ -117,10 +117,14 @@ void printdisp1(){
     lcd.setCursor(1,0);
     lcd.print(program);
     lcd.setCursor(3,0);
-    lcd.print(remtminutes);
-    if(remtminutes<10){
-      lcd.setCursor(4,0);
-      lcd.print(" ");
+    if(pauseflag[program]==0 or (pauseflag[program]==1 and remtminutes>0)){
+      lcd.print(remtminutes);
+      if(remtminutes<10){
+        lcd.setCursor(4,0);
+        lcd.print(" ");
+      }
+    }else{
+      lcd.print("P");
     }
         
     lcd.setCursor(0,1);
