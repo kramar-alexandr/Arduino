@@ -549,9 +549,9 @@ void ControlTemp(){
   long maxmin = progtime[program];
   remtminutes = maxmin - tminutes;
   if(tmills>=1000){
-    if(T1<=temp-0.5){
-      tminutes = 0;
-    }    
+    //if(T1<=temp-0.5){
+    //  tminutes = 0;
+    //}    
     tmills=0;
     oldtmills=millis();
     if(T1<temp){
