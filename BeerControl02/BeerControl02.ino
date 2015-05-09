@@ -62,10 +62,10 @@ unsigned long lastsensortime = 0;
 long tseconds = 0;
 int tminutes = 0;
 int program = 0;
-int prgcnt = 6;
+int prgcnt = 7;
 float totemp[] = {75,65,67,72,78,100,0};
 int progtime[] = {1,50,30,15,5,100,1};
-int pauseflag[] = {1,0,0,0,1,0};
+int pauseflag[] = {1,0,0,0,1,0,0};
 int remtminutes = 0;
 boolean oncontrol;
 float heatspeed1,heatspeed2,oldT1,oldT2;
@@ -309,9 +309,9 @@ void PressBtn5(){
 
 void PressBtn6(){
   if(pauseflag[program]==1){
-    pauseflag[program]=1;
-  }else{
     pauseflag[program]=0;
+  }else{
+    pauseflag[program]=1;
   }
 }
 
@@ -581,7 +581,7 @@ void ControlTemp(){
             program++;
             BeepProc(10);
           }else {
-            BeepProc(1);
+            BeepProc(30);
           }
         }
       }
