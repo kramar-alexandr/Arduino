@@ -174,10 +174,18 @@ void printdisp2(){
 
 void printdisp3(){
     lcd.setCursor(0,0);
-    lcd.print("PMP");
-    lcd.setCursor(4,0);
-    lcd.print(pausetime);
+    lcd.print("SENS");
+    lcd.setCursor(5,0);
+    lcd.print("    ");
+    lcd.setCursor(5,0);
+    lcd.print(analogSensor);
     
+    lcd.setCursor(0,1);
+    lcd.print("BUTN");
+    lcd.setCursor(5,1);
+    lcd.print("    ");
+    lcd.setCursor(5,1);
+    lcd.print(analogVal);
 }
 
 void LCDPrintInfo(){
@@ -188,7 +196,7 @@ void LCDPrintInfo(){
       break;
       case 2: printdisp2();
       break;
-      case 3: printdisp2();
+      case 3: printdisp3();
       break;
     }
     
@@ -376,7 +384,7 @@ void ButtonsLoop(){//                                              BUTTONS
   analogSensor = analogRead (2);
     
   if((millis()-lastsensortime)>1000*pausetime){
-    if(analogSensor>100){
+    if(analogSensor>30){
       lastsensortime = millis();
       if(rel1){
         digitalWrite(RELAY1, HIGH);
