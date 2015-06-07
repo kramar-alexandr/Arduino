@@ -384,7 +384,7 @@ void ButtonsLoop(){//                                              BUTTONS
   analogSensor = analogRead (2);
     
   if((millis()-lastsensortime)>1000*pausetime){
-    if(analogSensor>30){
+    if(analogSensor>50){
       lastsensortime = millis();
       if(rel1){
         digitalWrite(RELAY1, HIGH);
